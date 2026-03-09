@@ -130,9 +130,7 @@ body {
 .hero-section {
     position: relative; min-height: 75vh;
     display: flex; align-items: center;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: url('../images/hero-bg.jpg') center/cover no-repeat;
     overflow: hidden;
 }
 .hero-overlay {
