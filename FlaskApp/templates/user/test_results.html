@@ -1,0 +1,62 @@
+{% extends 'user/base_user.html' %}
+{% block title %}Test Nəticələrim{% endblock %}
+
+{% block user_content %}
+<style>
+    .level-circle { width: 72px; height: 72px; font-size: 1.5rem; font-weight: 800; }
+    .level-a1 { background: #dbeafe; color: #1e40af; }
+    .level-a2 { background: #d1fae5; color: #065f46; }
+    .level-b1 { background: #fef3c7; color: #92400e; }
+    .level-b2 { background: #fed7aa; color: #9a3412; }
+    .level-c1 { background: #fecaca; color: #991b1b; }
+    .level-other { background: #e9d5ff; color: #6b21a8; }
+</style>
+<h4 class="fw-bold mb-4"><i class="bi bi-journal-check me-2"></i>Dil Testi Nəticələrim</h4>
+
+{% if results %}
+<div class="row g-3">
+    {% for result in results %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                {% set level_class = 'level-' + result.level|lower if result.level in ['A1','A2','B1','B2','C1'] else 'level-other' %}
+                <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3 level-circle {{ level_class }}">
+                    {{ result.level }}
+                </div>
+                <h5 class="fw-bold mb-1">{{ result.score }} / 100</h5>
+                <p class="text-muted small mb-2">Səviyyə: {{ result.level }}</p>
+                
+                <div class="progress mb-2" style="height: 8px;">
+                    <div class="progress-bar {% if result.score >= 80 %}bg-success{% elif result.score >= 50 %}bg-warning{% else %}bg-danger{% endif %}"
+                         role="progressbar" aria-valuenow="{{ result.score }}" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                
+                <small class="text-muted">
+                    <i class="bi bi-calendar me-1"></i>{{ result.created_at.strftime('%d.%m.%Y %H:%M') }}
+                </small>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card">
+    <div class="card-body text-center py-5">
+        <i class="bi bi-journal-x fs-1 text-muted d-block mb-3"></i>
+        <h5 class="text-muted">Hələ ki test nəticəniz yoxdur</h5>
+        <p class="text-muted">Dil səviyyənizi öyrənmək üçün testimizi keçin.</p>
+        <a href="{{ url_for('public.divisions') }}" class="btn btn-primary">
+            <i class="bi bi-translate me-1"></i> Dil Testi
+        </a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block user_extra_js %}
+<script>
+document.querySelectorAll('.progress-bar[aria-valuenow]').forEach(function(bar) {
+    bar.style.width = bar.getAttribute('aria-valuenow') + '%';
+});
+</script>
+{% endblock %}

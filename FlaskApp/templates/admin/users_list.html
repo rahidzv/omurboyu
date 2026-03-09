@@ -1,0 +1,127 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}İstifadəçilər{% endblock %}
+
+{% block admin_content %}
+<style>
+    .avatar-sm-circle { width: 36px; height: 36px; color: #fff; font-size: 0.75rem; font-weight: 700; }
+    .avatar-admin { background: #1a365d; }
+    .avatar-user { background: #0ea5e9; }
+</style>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0"><i class="bi bi-person-gear me-2"></i>İstifadəçilər</h2>
+    <a href="{{ url_for('admin.user_create') }}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> Yeni İstifadəçi
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>İstifadəçi</th>
+                        <th>E-poçt</th>
+                        <th>Telefon</th>
+                        <th>Rol</th>
+                        <th>Status</th>
+                        <th>Qeydiyyat</th>
+                        <th>Əməliyyatlar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="d-inline-flex align-items-center justify-content-center rounded-circle avatar-sm-circle {% if user.is_admin %}avatar-admin{% else %}avatar-user{% endif %}">
+                                    {{ user.get_initials() }}
+                                </div>
+                                <div>
+                                    <div class="fw-medium">{{ user.full_name or user.username }}</div>
+                                    <small class="text-muted">@{{ user.username }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="small">{{ user.email }}</td>
+                        <td class="small">{{ user.phone or '-' }}</td>
+                        <td>
+                            {% if user.is_admin %}
+                                <span class="badge bg-danger"><i class="bi bi-shield-check me-1"></i>Admin</span>
+                            {% else %}
+                                <span class="badge bg-info">İstifadəçi</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user.is_active_user %}
+                                <span class="badge bg-success">Aktiv</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Deaktiv</span>
+                            {% endif %}
+                        </td>
+                        <td class="small text-muted">{{ user.created_at.strftime('%d.%m.%Y') }}</td>
+                        <td>
+                            <div class="d-flex gap-1 flex-wrap">
+                                <a href="{{ url_for('admin.user_edit', id=user.id) }}" class="btn btn-sm btn-outline-primary" title="Redaktə et">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                
+                                <!-- Reset Password Modal Trigger -->
+                                <button type="button" class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#resetPwModal{{ user.id }}" title="Şifrə sıfırla">
+                                    <i class="bi bi-key"></i>
+                                </button>
+                                
+                                {% if user.id != current_user.id %}
+                                <form method="POST" action="{{ url_for('admin.user_delete', id=user.id) }}" class="d-inline">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Sil" onclick="return confirm('{{ user.username }} istifadəçisini silmək istədiyinizə əminsiniz?')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Reset Password Modal -->
+                    <div class="modal fade" id="resetPwModal{{ user.id }}" tabindex="-1">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title">{{ user.username }} - Şifrə Sıfırla</h6>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <form method="POST" action="{{ url_for('admin.user_reset_password', id=user.id) }}">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <div class="modal-body">
+                                        <label class="form-label">Yeni Şifrə</label>
+                                        <input type="password" name="new_password" class="form-control" required minlength="6" placeholder="ən az 6 simvol">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Ləğv et</button>
+                                        <button type="submit" class="btn btn-sm btn-warning">Şifrəni Dəyiş</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center text-muted py-4">Heç bir istifadəçi tapılmadı.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="card-body py-2 d-flex justify-content-between align-items-center">
+        <small class="text-muted">Cəmi: <strong>{{ users|length }}</strong> istifadəçi</small>
+        <small class="text-muted">Admin: <strong>{{ users|selectattr('is_admin')|list|length }}</strong> | İstifadəçi: <strong>{{ users|rejectattr('is_admin')|list|length }}</strong></small>
+    </div>
+</div>
+{% endblock %}

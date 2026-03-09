@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Sənədlər{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <div class="animate-fade-up">
+            <h1 class="text-white fw-bold display-5">Sənədlər</h1>
+            <p class="text-white-75 fs-5 mt-3">Tələbələr üçün lazımi ərizə nümunələri və rəsmi sənədlər.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding">
+    <div class="container">
+        {% for cat_name, docs in categories.items() %}
+        <div class="mb-5 animate-fade-up delay-{{ loop.index0 }}">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="icon-box icon-box-accent">
+                    <i class="bi bi-file-earmark-text"></i>
+                </div>
+                <h3 class="fw-bold gradient-text mb-0">{{ cat_name }}</h3>
+            </div>
+            <div class="row g-3">
+                {% for doc in docs %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-card card-hover">
+                        <div class="card-body d-flex align-items-center justify-content-between p-3">
+                            <div class="d-flex align-items-start gap-3 min-w-0">
+                                <i class="bi bi-file-earmark-pdf text-accent fs-5 mt-1"></i>
+                                <div class="min-w-0">
+                                    <p class="fw-medium small mb-1 text-truncate">{{ doc.name }}</p>
+                                    <div class="d-flex gap-2">
+                                        <span class="badge bg-light text-muted border small">{{ doc.file_type }}</span>
+                                        <span class="text-muted" style="font-size: 0.75rem;">{{ doc.file_size }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if doc.file_path %}
+                            <a href="{{ url_for('static', filename=doc.file_path) }}" class="btn btn-sm btn-outline-accent flex-shrink-0" download>
+                                <i class="bi bi-download"></i>
+                            </a>
+                            {% else %}
+                            <button class="btn btn-sm btn-outline-secondary flex-shrink-0" disabled>
+                                <i class="bi bi-download"></i>
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+
+        {% if not categories %}
+        <div class="text-center py-5">
+            <i class="bi bi-file-earmark-x fs-1 text-muted"></i>
+            <p class="text-muted mt-3">Hazırda sənəd yoxdur.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

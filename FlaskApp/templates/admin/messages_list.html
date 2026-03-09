@@ -1,0 +1,65 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Mesajlar{% endblock %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Mesajlar</h2>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ad</th>
+                        <th>E-poçt</th>
+                        <th>Mövzu</th>
+                        <th>Mesaj</th>
+                        <th>Oxunub</th>
+                        <th>Tarix</th>
+                        <th>Əməliyyatlar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for message in messages %}
+                    <tr class="{{ '' if message.is_read else 'fw-bold' }}">
+                        <td>{{ loop.index }}</td>
+                        <td>{{ message.name }}</td>
+                        <td>{{ message.email }}</td>
+                        <td>{{ message.subject }}</td>
+                        <td>{{ message.message[:50] }}{{ '...' if message.message|length > 50 else '' }}</td>
+                        <td>
+                            {% if message.is_read %}
+                                <span class="badge bg-success">Oxunub</span>
+                            {% else %}
+                                <form method="POST" action="{{ url_for('admin.message_read', id=message.id) }}" class="d-inline">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-info" title="Oxundu kimi işarələ">
+                                        <i class="bi bi-check2"></i> Oxundu
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </td>
+                        <td>{{ message.created_at.strftime('%d.%m.%Y %H:%M') if message.created_at else '' }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('admin.message_delete', id=message.id) }}" class="d-inline">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Sil" onclick="return confirm('Silmək istədiyinizə əminsiniz?')">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center text-muted py-4">Heç bir mesaj tapılmadı.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Sənədlər{% endblock %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Sənədlər</h2>
+    <a href="{{ url_for('admin.document_create') }}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> Yeni Sənəd
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ad</th>
+                        <th>Kateqoriya</th>
+                        <th>Fayl növü</th>
+                        <th>Fayl ölçüsü</th>
+                        <th>Aktiv</th>
+                        <th>Əməliyyatlar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for document in documents %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ document.name }}</td>
+                        <td>{{ document.category }}</td>
+                        <td>{{ document.file_type }}</td>
+                        <td>{{ document.file_size }}</td>
+                        <td>
+                            {% if document.is_active %}
+                                <span class="badge bg-success">Aktiv</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Deaktiv</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                <a href="{{ url_for('admin.document_edit', id=document.id) }}" class="btn btn-sm btn-outline-primary" title="Redaktə et">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <form method="POST" action="{{ url_for('admin.document_delete', id=document.id) }}" class="d-inline">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Sil" onclick="return confirm('Silmək istədiyinizə əminsiniz?')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">Heç bir sənəd tapılmadı.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

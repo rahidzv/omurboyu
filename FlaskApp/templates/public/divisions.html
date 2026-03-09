@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block title %}Bölmələr{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <div class="animate-fade-up">
+            <h1 class="text-white fw-bold display-5">Bölmələrimiz</h1>
+            <p class="text-white-75 fs-5 mt-3">Üç əsas bölmədə peşəkar inkişaf və təhsil imkanları.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding">
+    <div class="container">
+        <!-- Tabs Navigation -->
+        <ul class="nav nav-pills nav-fill gap-2 mb-5 flex-column flex-md-row" id="divisionsTab" role="tablist">
+            {% for div in divisions %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link division-tab {% if div.slug == active_tab %}active{% endif %}" 
+                        id="{{ div.slug }}-tab" data-bs-toggle="tab" data-bs-target="#{{ div.slug }}" 
+                        type="button" role="tab">
+                    <i class="bi bi-{{ div.icon }} me-2"></i>{{ div.short_title }}
+                </button>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <!-- Tabs Content -->
+        <div class="tab-content" id="divisionsTabContent">
+            {% for div in divisions %}
+            <div class="tab-pane fade {% if div.slug == active_tab %}show active{% endif %}" 
+                 id="{{ div.slug }}" role="tabpanel">
+                
+                <!-- Division Header -->
+                <div class="card shadow-card mb-4 overflow-hidden">
+                    <div class="card-accent-top"></div>
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start gap-4">
+                            <div class="icon-box icon-box-{{ ['primary', 'warning', 'success'][loop.index0 % 3] }} flex-shrink-0">
+                                <i class="bi bi-{{ div.icon }} fs-3"></i>
+                            </div>
+                            <div>
+                                <h2 class="fw-bold mb-3">{{ div.title }}</h2>
+                                <p class="text-muted mb-0">{{ div.overview }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Main Content -->
+                    <div class="col-lg-8">
+                        <!-- Mission -->
+                        <div class="card shadow-card mb-4">
+                            <div class="card-body p-4">
+                                <h5 class="fw-bold d-flex align-items-center gap-2 mb-3">
+                                    <i class="bi bi-award text-accent"></i> Missiyamız
+                                </h5>
+                                <p class="text-muted mb-0">{{ div.mission }}</p>
+                            </div>
+                        </div>
+
+                        <!-- Features -->
+                        <div class="card shadow-card mb-4">
+                            <div class="card-body p-4">
+                                <h5 class="fw-bold d-flex align-items-center gap-2 mb-3">
+                                    <i class="bi bi-check-circle text-accent"></i> Əsas Xüsusiyyətlər
+                                </h5>
+                                <div class="row g-2">
+                                    {% for feature in div.get_features() %}
+                                    <div class="col-md-6">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="bi bi-check-circle-fill text-accent small"></i>
+                                            <span class="small">{{ feature }}</span>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Programs -->
+                        <div class="card shadow-card">
+                            <div class="card-body p-4">
+                                <h5 class="fw-bold d-flex align-items-center gap-2 mb-3">
+                                    <i class="bi bi-book text-accent"></i> Proqramlar və Kurslar
+                                </h5>
+                                {% for program in div.programs %}
+                                <div class="d-flex align-items-center justify-content-between p-3 rounded bg-light mb-2">
+                                    <div>
+                                        <div class="fw-medium">{{ program.title }}</div>
+                                        <small class="text-muted">Müddət: {{ program.duration }}</small>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="badge bg-secondary-subtle text-secondary">{{ program.category }}</span>
+                                        <a href="{{ url_for('public.apply') }}" class="btn btn-sm btn-outline-accent">
+                                            Qeydiyyat <i class="bi bi-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="col-lg-4">
+                        <!-- Staff Structure -->
+                        <div class="card shadow-card mb-4">
+                            <div class="card-body p-4">
+                                <h5 class="fw-bold d-flex align-items-center gap-2 mb-3">
+                                    <i class="bi bi-people text-accent"></i> Heyət
+                                </h5>
+                                {% for member in div.staff_members %}
+                                <div class="d-flex align-items-center justify-content-between p-2 rounded bg-light mb-2">
+                                    <span class="small">{{ member.name or member.title }}</span>
+                                    <span class="badge bg-outline">{{ member.title }}</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- CTA -->
+                        <div class="card bg-gradient-primary text-white">
+                            <div class="card-body text-center p-4">
+                                <h5 class="fw-bold">Qoşulmaq İstəyirsiniz?</h5>
+                                <p class="text-white-75 small">Proqramlarımız haqqında ətraflı məlumat alın.</p>
+                                <a href="{{ url_for('public.apply') }}" class="btn btn-light text-primary w-100">
+                                    Qeydiyyat
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

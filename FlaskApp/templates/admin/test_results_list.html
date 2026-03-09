@@ -1,0 +1,43 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Test Nəticələri{% endblock %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Test Nəticələri</h2>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ad</th>
+                        <th>E-poçt</th>
+                        <th>Bal</th>
+                        <th>Səviyyə</th>
+                        <th>Tarix</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in test_results %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ result.name }}</td>
+                        <td>{{ result.email }}</td>
+                        <td>{{ result.score }}</td>
+                        <td>{{ result.level }}</td>
+                        <td>{{ result.created_at.strftime('%d.%m.%Y %H:%M') if result.created_at else '' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">Heç bir test nəticəsi tapılmadı.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

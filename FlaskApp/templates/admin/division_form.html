@@ -1,0 +1,80 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}{{ 'Redaktə: ' ~ division.title if division else 'Yeni Bölmə' }}{% endblock %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">{{ 'Redaktə: ' ~ division.title if division else 'Yeni Bölmə' }}</h2>
+    <a href="{{ url_for('admin.divisions_list') }}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Geri
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" action="">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="slug" class="form-label">Slug</label>
+                    <input type="text" class="form-control" id="slug" name="slug" value="{{ division.slug if division else '' }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="title" class="form-label">Başlıq</label>
+                    <input type="text" class="form-control" id="title" name="title" value="{{ division.title if division else '' }}" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="short_title" class="form-label">Qısa başlıq</label>
+                    <input type="text" class="form-control" id="short_title" name="short_title" value="{{ division.short_title if division else '' }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="icon" class="form-label">İkon</label>
+                    <input type="text" class="form-control" id="icon" name="icon" value="{{ division.icon if division else '' }}" placeholder="məs: bi-book">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="color" class="form-label">Rəng</label>
+                    <input type="text" class="form-control" id="color" name="color" value="{{ division.color if division else '' }}" placeholder="məs: #3B82F6">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="order" class="form-label">Sıra</label>
+                    <input type="number" class="form-control" id="order" name="order" value="{{ division.order if division else 0 }}">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="mission" class="form-label">Missiya</label>
+                <textarea class="form-control" id="mission" name="mission" rows="3">{{ division.mission if division else '' }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="overview" class="form-label">İcmal</label>
+                <textarea class="form-control" id="overview" name="overview" rows="3">{{ division.overview if division else '' }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="features" class="form-label">Xüsusiyyətlər <small class="text-muted">(hər sətirdə bir)</small></label>
+                <textarea class="form-control" id="features" name="features" rows="4">{{ division.features if division else '' }}</textarea>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="is_active" name="is_active" value="1"
+                    {{ 'checked' if (division and division.is_active) or not division else '' }}>
+                <label class="form-check-label" for="is_active">Aktiv</label>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-lg me-1"></i> {{ 'Yenilə' if division else 'Yarat' }}
+                </button>
+                <a href="{{ url_for('admin.divisions_list') }}" class="btn btn-outline-secondary">Ləğv et</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

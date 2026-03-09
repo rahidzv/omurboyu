@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Hesabım{% endblock %} - ÖTM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --user-primary: #1a365d;
+            --user-accent: #0ea5e9;
+            --user-sidebar-width: 260px;
+        }
+        body { font-family: 'Inter', sans-serif; background: #f1f5f9; margin: 0; overflow-x: hidden; }
+        .user-wrapper { display: flex; min-height: 100vh; }
+
+        /* Sidebar */
+        .user-sidebar {
+            position: fixed; top: 0; left: 0; bottom: 0;
+            width: var(--user-sidebar-width);
+            background: linear-gradient(180deg, var(--user-primary), #0f2440);
+            color: #fff; z-index: 1000;
+            display: flex; flex-direction: column;
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+        .user-sidebar-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; gap: 0.75rem;
+        }
+        .user-avatar {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: var(--user-accent); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 1.1rem; flex-shrink: 0;
+        }
+        .user-info h6 { margin: 0; font-weight: 600; font-size: 0.95rem; }
+        .user-info small { opacity: 0.7; font-size: 0.8rem; }
+
+        .user-nav { flex: 1; padding: 0.75rem 0; display: flex; flex-direction: column; }
+        .user-nav a {
+            display: flex; align-items: center; gap: 0.6rem;
+            padding: 0.6rem 1.25rem; color: rgba(255,255,255,0.7);
+            text-decoration: none; font-size: 0.9rem; transition: all 0.2s;
+        }
+        .user-nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+        .user-nav a.active { color: #fff; background: rgba(14,165,233,0.2); border-right: 3px solid var(--user-accent); }
+        .user-nav a i { font-size: 1.1rem; width: 24px; text-align: center; }
+        .nav-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 0.5rem 1rem; }
+
+        .sidebar-close-user { background: none; border: none; color: rgba(255,255,255,0.6); cursor: pointer; font-size: 1.1rem; margin-left: auto; display: none; }
+
+        /* Main content */
+        .user-main { margin-left: var(--user-sidebar-width); flex: 1; min-height: 100vh; }
+        .user-header {
+            background: #fff; height: 60px;
+            display: flex; align-items: center; padding: 0 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .user-header .sidebar-toggle-user { background: none; border: none; font-size: 1.3rem; cursor: pointer; display: none; color: #475569; }
+        .user-content { padding: 1.5rem; }
+
+        .stat-card {
+            background: #fff; border-radius: 12px; padding: 1.25rem; 
+            border: 1px solid #e2e8f0; transition: transform 0.2s;
+        }
+        .stat-card:hover { transform: translateY(-2px); }
+        .stat-card .stat-icon {
+            width: 48px; height: 48px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem;
+        }
+        .stat-card .stat-value { font-size: 1.5rem; font-weight: 700; color: #1e293b; }
+        .stat-card .stat-label { font-size: 0.85rem; color: #64748b; }
+
+        .status-badge { padding: 0.3rem 0.7rem; border-radius: 20px; font-size: 0.78rem; font-weight: 500; }
+        .status-new { background: #dbeafe; color: #1e40af; }
+        .status-contacted { background: #fef3c7; color: #92400e; }
+        .status-accepted { background: #d1fae5; color: #065f46; }
+        .status-rejected { background: #fee2e2; color: #991b1b; }
+
+        @media (max-width: 991px) {
+            .user-sidebar { transform: translateX(-100%); }
+            .user-sidebar.show { transform: translateX(0); }
+            .user-main { margin-left: 0; }
+            .user-header .sidebar-toggle-user { display: block; }
+            .sidebar-close-user { display: block; }
+        }
+        .sidebar-overlay-user {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 999;
+        }
+        .sidebar-overlay-user.show { display: block; }
+
+        .card { border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: none; }
+        .card-header { background: #f8fafc; border-bottom: 1px solid #e2e8f0; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="user-wrapper">
+        <aside class="user-sidebar" id="userSidebar">
+            <div class="user-sidebar-header">
+                <div class="user-avatar">{{ current_user.get_initials() }}</div>
+                <div class="user-info">
+                    <h6>{{ current_user.full_name or current_user.username }}</h6>
+                    <small>{{ current_user.email }}</small>
+                </div>
+                <button class="sidebar-close-user" id="userSidebarClose"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <nav class="user-nav">
+                <a href="{{ url_for('user.dashboard') }}" class="{% if request.endpoint == 'user.dashboard' %}active{% endif %}">
+                    <i class="bi bi-speedometer2"></i> İdarə Paneli
+                </a>
+                <a href="{{ url_for('user.profile') }}" class="{% if request.endpoint == 'user.profile' %}active{% endif %}">
+                    <i class="bi bi-person"></i> Profilim
+                </a>
+                <a href="{{ url_for('user.change_password') }}" class="{% if request.endpoint == 'user.change_password' %}active{% endif %}">
+                    <i class="bi bi-key"></i> Şifrə Dəyiş
+                </a>
+                <div class="nav-divider"></div>
+                <a href="{{ url_for('user.my_registrations') }}" class="{% if request.endpoint == 'user.my_registrations' %}active{% endif %}">
+                    <i class="bi bi-person-plus"></i> Qeydiyyatlarım
+                </a>
+                <a href="{{ url_for('user.my_messages') }}" class="{% if request.endpoint == 'user.my_messages' %}active{% endif %}">
+                    <i class="bi bi-envelope"></i> Mesajlarım
+                </a>
+                <a href="{{ url_for('user.my_test_results') }}" class="{% if request.endpoint == 'user.my_test_results' %}active{% endif %}">
+                    <i class="bi bi-journal-check"></i> Test Nəticələrim
+                </a>
+                <div class="nav-divider"></div>
+                <a href="{{ url_for('public.index') }}">
+                    <i class="bi bi-box-arrow-up-right"></i> Sayta Qayıt
+                </a>
+                <a href="{{ url_for('user.logout') }}" class="text-danger">
+                    <i class="bi bi-box-arrow-left"></i> Çıxış
+                </a>
+            </nav>
+        </aside>
+
+        <div class="user-main">
+            <header class="user-header">
+                <button class="sidebar-toggle-user" id="userSidebarToggle">
+                    <i class="bi bi-list fs-4"></i>
+                </button>
+                <div class="d-flex align-items-center gap-2 ms-auto">
+                    <span class="text-muted small">{{ current_user.full_name or current_user.username }}</span>
+                </div>
+            </header>
+
+            <div class="user-content">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                {% block user_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar-overlay-user" id="userSidebarOverlay"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const sidebar = document.getElementById('userSidebar');
+        const toggle = document.getElementById('userSidebarToggle');
+        const closeBtn = document.getElementById('userSidebarClose');
+        const overlay = document.getElementById('userSidebarOverlay');
+        function openSidebar() { sidebar.classList.add('show'); overlay.classList.add('show'); }
+        function closeSidebar() { sidebar.classList.remove('show'); overlay.classList.remove('show'); }
+        if(toggle) toggle.addEventListener('click', openSidebar);
+        if(closeBtn) closeBtn.addEventListener('click', closeSidebar);
+        if(overlay) overlay.addEventListener('click', closeSidebar);
+    </script>
+    {% block user_extra_js %}{% endblock %}
+</body>
+</html>

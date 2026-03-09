@@ -1,0 +1,75 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}{{ 'Redaktə: ' ~ program.title if program else 'Yeni Proqram' }}{% endblock %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">{{ 'Redaktə: ' ~ program.title if program else 'Yeni Proqram' }}</h2>
+    <a href="{{ url_for('admin.programs_list') }}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Geri
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" action="">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="title" class="form-label">Başlıq</label>
+                    <input type="text" class="form-control" id="title" name="title" value="{{ program.title if program else '' }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="category" class="form-label">Kateqoriya</label>
+                    <input type="text" class="form-control" id="category" name="category" value="{{ program.category if program else '' }}" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="duration" class="form-label">Müddət</label>
+                    <input type="text" class="form-control" id="duration" name="duration" value="{{ program.duration if program else '' }}" placeholder="məs: 6 ay">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="students" class="form-label">Tələbə sayı</label>
+                    <input type="number" class="form-control" id="students" name="students" value="{{ program.students if program else 0 }}">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="rating" class="form-label">Reytinq</label>
+                    <input type="number" class="form-control" id="rating" name="rating" step="0.1" min="0" max="5" value="{{ program.rating if program else 0 }}">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Təsvir</label>
+                <textarea class="form-control" id="description" name="description" rows="4">{{ program.description if program else '' }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="division_id" class="form-label">Bölmə</label>
+                <select class="form-select" id="division_id" name="division_id">
+                    <option value="">— Bölmə seçin —</option>
+                    {% for division in divisions %}
+                    <option value="{{ division.id }}" {{ 'selected' if program and program.division_id == division.id else '' }}>
+                        {{ division.title }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="is_active" name="is_active" value="1"
+                    {{ 'checked' if (program and program.is_active) or not program else '' }}>
+                <label class="form-check-label" for="is_active">Aktiv</label>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-lg me-1"></i> {{ 'Yenilə' if program else 'Yarat' }}
+                </button>
+                <a href="{{ url_for('admin.programs_list') }}" class="btn btn-outline-secondary">Ləğv et</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

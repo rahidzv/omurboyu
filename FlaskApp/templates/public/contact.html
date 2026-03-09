@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Əlaqə{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <div class="animate-fade-up">
+            <h1 class="text-white fw-bold display-5">Əlaqə</h1>
+            <p class="text-white-75 fs-5 mt-3">Bizimlə əlaqə saxlayın.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding">
+    <div class="container">
+        <div class="row g-5">
+            <!-- Contact Info -->
+            <div class="col-lg-5 animate-fade-up">
+                <h3 class="fw-bold mb-4">Əlaqə Məlumatları</h3>
+                <div class="d-flex flex-column gap-3">
+                    {% for item in [
+                        {'icon': 'geo-alt', 'title': 'Ünvan', 'content': 'Mingəçevir şəhəri, MDU Kampusu'},
+                        {'icon': 'telephone', 'title': 'Telefon', 'content': '+994 XX XXX XX XX'},
+                        {'icon': 'envelope', 'title': 'E-poçt', 'content': 'info@mdu.edu.az'},
+                        {'icon': 'clock', 'title': 'İş Saatları', 'content': 'B.e - Cümə: 09:00 - 18:00'}
+                    ] %}
+                    <div class="card shadow-card">
+                        <div class="card-body d-flex align-items-center gap-3 p-3">
+                            <div class="icon-box icon-box-accent flex-shrink-0">
+                                <i class="bi bi-{{ item.icon }}"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold">{{ item.title }}</div>
+                                <div class="text-muted small">{{ item.content }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="col-lg-7 animate-fade-up" style="animation-delay:0.1s">
+                <div class="card shadow-card">
+                    <div class="card-body p-4 p-md-5">
+                        <h3 class="fw-bold mb-4">Mesaj Göndər</h3>
+                        <form method="POST" action="{{ url_for('public.contact') }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-medium">Ad</label>
+                                    <input type="text" name="name" class="form-control" placeholder="Adınız" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-medium">E-poçt</label>
+                                    <input type="email" name="email" class="form-control" placeholder="email@example.com" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-medium">Mövzu</label>
+                                    <input type="text" name="subject" class="form-control" placeholder="Mövzu" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-medium">Mesaj</label>
+                                    <textarea name="message" class="form-control" rows="5" placeholder="Mesajınız..." required></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-accent btn-lg w-100">Göndər</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

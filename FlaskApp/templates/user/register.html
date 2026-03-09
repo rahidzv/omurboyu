@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}Qeydiyyat{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm" style="border-radius: 16px;">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="text-center mb-4">
+                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
+                                 style="width: 64px; height: 64px; background: linear-gradient(135deg, #1a365d, #0ea5e9);">
+                                <i class="bi bi-person-plus-fill text-white fs-3"></i>
+                            </div>
+                            <h3 class="fw-bold mb-1">Hesab Yaradın</h3>
+                            <p class="text-muted">Ömürboyu Təhsil Məktəbi portalına qoşulun</p>
+                        </div>
+
+                        <form method="POST" action="{{ url_for('user.register') }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-medium">İstifadəçi adı *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
+                                        <input type="text" name="username" class="form-control" placeholder="ən az 3 simvol" required minlength="3">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-medium">E-poçt *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
+                                        <input type="email" name="email" class="form-control" placeholder="email@example.com" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-medium">Ad Soyad</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="bi bi-person-badge"></i></span>
+                                        <input type="text" name="full_name" class="form-control" placeholder="Ad və Soyadınız">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-medium">Telefon</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="bi bi-telephone"></i></span>
+                                        <input type="tel" name="phone" class="form-control" placeholder="+994 XX XXX XX XX">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-medium">Şifrə *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="bi bi-lock"></i></span>
+                                        <input type="password" name="password" class="form-control" placeholder="ən az 6 simvol" required minlength="6">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-medium">Şifrə təkrar *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i class="bi bi-lock-fill"></i></span>
+                                        <input type="password" name="password2" class="form-control" placeholder="Şifrəni təkrarlayın" required minlength="6">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 py-2 fw-medium mt-2" 
+                                    style="background: linear-gradient(135deg, #1a365d, #0ea5e9); border: none; border-radius: 10px;">
+                                <i class="bi bi-person-plus me-1"></i> Qeydiyyatdan keç
+                            </button>
+                        </form>
+
+                        <div class="text-center mt-4">
+                            <p class="text-muted mb-0">
+                                Artıq hesabınız var? 
+                                <a href="{{ url_for('user.login') }}" class="fw-medium text-decoration-none" style="color: #0ea5e9;">Daxil olun</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

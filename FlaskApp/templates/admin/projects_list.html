@@ -1,0 +1,55 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}MH Layihələr{% endblock %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">MH Layihələr</h2>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ad</th>
+                        <th>E-poçt</th>
+                        <th>Layihə adı</th>
+                        <th>Texnologiyalar</th>
+                        <th>Status</th>
+                        <th>Tarix</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in projects %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ project.name }}</td>
+                        <td>{{ project.email }}</td>
+                        <td>{{ project.project_name }}</td>
+                        <td>{{ project.technologies }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('admin.project_status', id=project.id) }}" class="d-inline">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <select name="status" class="form-select form-select-sm d-inline-block w-auto" onchange="this.form.submit()">
+                                    {% set statuses = [('new', 'Yeni'), ('in_review', 'Baxılır'), ('approved', 'Təsdiqləndi'), ('rejected', 'Rədd edildi')] %}
+                                    {% for value, label in statuses %}
+                                    <option value="{{ value }}" {{ 'selected' if project.status == value else '' }}>{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </td>
+                        <td>{{ project.created_at.strftime('%d.%m.%Y %H:%M') if project.created_at else '' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">Heç bir layihə tapılmadı.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

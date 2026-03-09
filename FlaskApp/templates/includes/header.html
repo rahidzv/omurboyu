@@ -1,0 +1,54 @@
+<header class="header-fixed">
+    <div class="container">
+        <div class="header-inner">
+            <a href="{{ url_for('public.index') }}" class="header-logo">
+                <span class="logo-text gradient-text fw-bold">ÖTM</span>
+                <span class="logo-subtitle d-none d-md-inline">Ömürboyu Təhsil Məktəbi</span>
+            </a>
+            <nav class="header-nav d-none d-lg-flex">
+                <a href="{{ url_for('public.index') }}" class="nav-link {% if request.endpoint == 'public.index' %}active{% endif %}">Ana Səhifə</a>
+                <a href="{{ url_for('public.about') }}" class="nav-link {% if request.endpoint == 'public.about' %}active{% endif %}">Haqqımızda</a>
+                <a href="{{ url_for('public.divisions') }}" class="nav-link {% if request.endpoint == 'public.divisions' %}active{% endif %}">Bölmələr</a>
+                <a href="{{ url_for('public.staff') }}" class="nav-link {% if request.endpoint == 'public.staff' %}active{% endif %}">Heyət</a>
+                <a href="{{ url_for('public.programs') }}" class="nav-link {% if request.endpoint == 'public.programs' %}active{% endif %}">Proqramlar</a>
+                <a href="{{ url_for('public.events') }}" class="nav-link {% if request.endpoint == 'public.events' %}active{% endif %}">Tədbirlər</a>
+                <a href="{{ url_for('public.documents') }}" class="nav-link {% if request.endpoint == 'public.documents' %}active{% endif %}">Sənədlər</a>
+                <a href="{{ url_for('public.contact') }}" class="nav-link {% if request.endpoint == 'public.contact' %}active{% endif %}">Əlaqə</a>
+            </nav>
+            <div class="header-actions d-none d-lg-flex align-items-center gap-2">
+                {% if current_user.is_authenticated %}
+                    <a href="{% if current_user.is_admin %}{{ url_for('admin.dashboard') }}{% else %}{{ url_for('user.dashboard') }}{% endif %}" class="btn btn-outline-accent btn-sm">
+                        <i class="bi bi-speedometer2"></i> {{ current_user.username }}
+                    </a>
+                    <a href="{{ url_for('user.logout') }}" class="btn btn-sm text-muted"><i class="bi bi-box-arrow-right"></i></a>
+                {% else %}
+                    <a href="{{ url_for('user.login') }}" class="btn btn-outline-accent btn-sm">Daxil ol</a>
+                    <a href="{{ url_for('user.register') }}" class="btn btn-accent btn-sm">Qeydiyyat</a>
+                {% endif %}
+            </div>
+            <button class="hamburger d-lg-none" id="menuToggle" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </div>
+    <!-- Mobile menu -->
+    <div class="mobile-menu d-lg-none" id="mobileMenu">
+        <nav class="mobile-nav">
+            <a href="{{ url_for('public.index') }}" class="mobile-link">Ana Səhifə</a>
+            <a href="{{ url_for('public.about') }}" class="mobile-link">Haqqımızda</a>
+            <a href="{{ url_for('public.divisions') }}" class="mobile-link">Bölmələr</a>
+            <a href="{{ url_for('public.staff') }}" class="mobile-link">Heyət</a>
+            <a href="{{ url_for('public.programs') }}" class="mobile-link">Proqramlar</a>
+            <a href="{{ url_for('public.events') }}" class="mobile-link">Tədbirlər</a>
+            <a href="{{ url_for('public.documents') }}" class="mobile-link">Sənədlər</a>
+            <a href="{{ url_for('public.contact') }}" class="mobile-link">Əlaqə</a>
+            {% if current_user.is_authenticated %}
+                <a href="{% if current_user.is_admin %}{{ url_for('admin.dashboard') }}{% else %}{{ url_for('user.dashboard') }}{% endif %}" class="mobile-link"><i class="bi bi-speedometer2"></i> Hesabım</a>
+                <a href="{{ url_for('user.logout') }}" class="mobile-link text-danger"><i class="bi bi-box-arrow-right"></i> Çıxış</a>
+            {% else %}
+                <a href="{{ url_for('user.login') }}" class="btn btn-outline-accent w-100 mt-2">Daxil ol</a>
+                <a href="{{ url_for('user.register') }}" class="btn btn-accent w-100 mt-2">Qeydiyyat</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin{% endblock %} - ÖTM İdarəetmə</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <div class="admin-wrapper">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="sidebar-header">
+                <a href="{{ url_for('admin.dashboard') }}" class="sidebar-brand">
+                    <span class="brand-icon">ÖTM</span>
+                    <span class="brand-text">Admin Panel</span>
+                </a>
+                <button class="sidebar-close d-lg-none" id="sidebarClose"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <span class="nav-section-title">Əsas</span>
+                    <a href="{{ url_for('admin.dashboard') }}" class="nav-item {% if request.endpoint == 'admin.dashboard' %}active{% endif %}">
+                        <i class="bi bi-speedometer2"></i> İdarə Paneli
+                    </a>
+                </div>
+                <div class="nav-section">
+                    <span class="nav-section-title">Məzmun</span>
+                    <a href="{{ url_for('admin.divisions_list') }}" class="nav-item {% if 'division' in request.endpoint %}active{% endif %}">
+                        <i class="bi bi-grid"></i> Bölmələr
+                    </a>
+                    <a href="{{ url_for('admin.programs_list') }}" class="nav-item {% if 'program' in request.endpoint %}active{% endif %}">
+                        <i class="bi bi-book"></i> Proqramlar
+                    </a>
+                    <a href="{{ url_for('admin.events_list') }}" class="nav-item {% if 'event' in request.endpoint %}active{% endif %}">
+                        <i class="bi bi-calendar-event"></i> Tədbirlər
+                    </a>
+                    <a href="{{ url_for('admin.staff_list') }}" class="nav-item {% if 'staff' in request.endpoint %}active{% endif %}">
+                        <i class="bi bi-people"></i> Heyət
+                    </a>
+                    <a href="{{ url_for('admin.testimonials_list') }}" class="nav-item {% if 'testimonial' in request.endpoint %}active{% endif %}">
+                        <i class="bi bi-chat-quote"></i> Rəylər
+                    </a>
+                    <a href="{{ url_for('admin.documents_list') }}" class="nav-item {% if 'document' in request.endpoint %}active{% endif %}">
+                        <i class="bi bi-file-earmark"></i> Sənədlər
+                    </a>
+                </div>
+                <div class="nav-section">
+                    <span class="nav-section-title">Müraciətlər</span>
+                    <a href="{{ url_for('admin.registrations_list') }}" class="nav-item {% if 'registration' in request.endpoint %}active{% endif %}">
+                        <i class="bi bi-person-plus"></i> Qeydiyyatlar
+                    </a>
+                    <a href="{{ url_for('admin.messages_list') }}" class="nav-item {% if 'message' in request.endpoint %}active{% endif %}">
+                        <i class="bi bi-envelope"></i> Mesajlar
+                    </a>
+                    <a href="{{ url_for('admin.subscribers_list') }}" class="nav-item {% if 'subscriber' in request.endpoint %}active{% endif %}">
+                        <i class="bi bi-newspaper"></i> Abunəçilər
+                    </a>
+                    <a href="{{ url_for('admin.test_results_list') }}" class="nav-item {% if 'test_result' in request.endpoint %}active{% endif %}">
+                        <i class="bi bi-journal-check"></i> Test Nəticələri
+                    </a>
+                    <a href="{{ url_for('admin.projects_list') }}" class="nav-item {% if 'project' in request.endpoint %}active{% endif %}">
+                        <i class="bi bi-gear"></i> MH Layihələr
+                    </a>
+                </div>
+                <div class="nav-section">
+                    <span class="nav-section-title">Sistem</span>
+                    <a href="{{ url_for('admin.users_list') }}" class="nav-item {% if 'user' in request.endpoint %}active{% endif %}">
+                        <i class="bi bi-person-gear"></i> İstifadəçilər
+                    </a>
+                    <a href="{{ url_for('admin.site_settings') }}" class="nav-item {% if 'settings' in request.endpoint %}active{% endif %}">
+                        <i class="bi bi-sliders"></i> Sayt Ayarları
+                    </a>
+                    <a href="{{ url_for('admin.change_password') }}" class="nav-item {% if 'change_password' in request.endpoint %}active{% endif %}">
+                        <i class="bi bi-key"></i> Şifrə Dəyiş
+                    </a>
+                </div>
+                <div class="nav-section mt-auto">
+                    <a href="{{ url_for('public.index') }}" class="nav-item" target="_blank">
+                        <i class="bi bi-box-arrow-up-right"></i> Saytı Gör
+                    </a>
+                    <a href="{{ url_for('admin.logout') }}" class="nav-item text-danger">
+                        <i class="bi bi-box-arrow-left"></i> Çıxış
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="admin-main">
+            <header class="admin-header">
+                <button class="sidebar-toggle d-lg-none" id="sidebarToggle">
+                    <i class="bi bi-list fs-4"></i>
+                </button>
+                <div class="d-flex align-items-center gap-3 ms-auto">
+                    <span class="text-muted small">{{ current_user.username }}</span>
+                    <div class="avatar-circle avatar-sm">{{ current_user.username[:2]|upper }}</div>
+                </div>
+            </header>
+
+            <div class="admin-content">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                {% block admin_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sidebar toggle
+        const sidebar = document.getElementById('adminSidebar');
+        const toggle = document.getElementById('sidebarToggle');
+        const closeBtn = document.getElementById('sidebarClose');
+        const overlay = document.getElementById('sidebarOverlay');
+        function openSidebar() { sidebar.classList.add('show'); overlay.classList.add('show'); }
+        function closeSidebar() { sidebar.classList.remove('show'); overlay.classList.remove('show'); }
+        if(toggle) toggle.addEventListener('click', openSidebar);
+        if(closeBtn) closeBtn.addEventListener('click', closeSidebar);
+        if(overlay) overlay.addEventListener('click', closeSidebar);
+    </script>
+    {% block admin_extra_js %}{% endblock %}
+</body>
+</html>

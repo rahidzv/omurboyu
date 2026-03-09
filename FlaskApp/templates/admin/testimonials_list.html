@@ -1,0 +1,64 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Rəylər{% endblock %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Rəylər</h2>
+    <a href="{{ url_for('admin.testimonial_create') }}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> Yeni Rəy
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Ad</th>
+                        <th>Rol</th>
+                        <th>Məzmun</th>
+                        <th>Aktiv</th>
+                        <th>Əməliyyatlar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for testimonial in testimonials %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ testimonial.name }}</td>
+                        <td>{{ testimonial.role }}</td>
+                        <td>{{ testimonial.content[:80] }}{{ '...' if testimonial.content|length > 80 else '' }}</td>
+                        <td>
+                            {% if testimonial.is_active %}
+                                <span class="badge bg-success">Aktiv</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Deaktiv</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                <a href="{{ url_for('admin.testimonial_edit', id=testimonial.id) }}" class="btn btn-sm btn-outline-primary" title="Redaktə et">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <form method="POST" action="{{ url_for('admin.testimonial_delete', id=testimonial.id) }}" class="d-inline">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Sil" onclick="return confirm('Silmək istədiyinizə əminsiniz?')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">Heç bir rəy tapılmadı.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

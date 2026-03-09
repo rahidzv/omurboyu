@@ -1,0 +1,96 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}{{ 'Redaktə: ' ~ staff.name if staff else 'Yeni Heyət Üzvü' }}{% endblock %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">{{ 'Redaktə: ' ~ staff.name if staff else 'Yeni Heyət Üzvü' }}</h2>
+    <a href="{{ url_for('admin.staff_list') }}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Geri
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" action="" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="name" class="form-label">Ad Soyad</label>
+                    <input type="text" class="form-control" id="name" name="name" value="{{ staff.name if staff else '' }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="title" class="form-label">Vəzifə</label>
+                    <input type="text" class="form-control" id="title" name="title" value="{{ staff.title if staff else '' }}" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="bio" class="form-label">Bioqrafiya</label>
+                <textarea class="form-control" id="bio" name="bio" rows="4">{{ staff.bio if staff else '' }}</textarea>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label">E-poçt</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ staff.email if staff else '' }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="phone" class="form-label">Telefon</label>
+                    <input type="text" class="form-control" id="phone" name="phone" value="{{ staff.phone if staff else '' }}">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="division_id" class="form-label">Bölmə</label>
+                    <select class="form-select" id="division_id" name="division_id">
+                        <option value="">— Bölmə seçin —</option>
+                        {% for division in divisions %}
+                        <option value="{{ division.id }}" {{ 'selected' if staff and staff.division_id == division.id else '' }}>
+                            {{ division.title }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="order" class="form-label">Sıra</label>
+                    <input type="number" class="form-control" id="order" name="order" value="{{ staff.order if staff else 0 }}">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="image" class="form-label">Şəkil</label>
+                <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                {% if staff and staff.image %}
+                    <small class="text-muted mt-1 d-block">Mövcud fayl: {{ staff.image }}</small>
+                {% endif %}
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="is_director" name="is_director" value="1"
+                            {{ 'checked' if staff and staff.is_director else '' }}>
+                        <label class="form-check-label" for="is_director">Direktor</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="is_active" name="is_active" value="1"
+                            {{ 'checked' if (staff and staff.is_active) or not staff else '' }}>
+                        <label class="form-check-label" for="is_active">Aktiv</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-lg me-1"></i> {{ 'Yenilə' if staff else 'Yarat' }}
+                </button>
+                <a href="{{ url_for('admin.staff_list') }}" class="btn btn-outline-secondary">Ləğv et</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
