@@ -22,7 +22,8 @@ source "$VENV_DIR/bin/activate"
 pip install -r "$FLASK_DIR/requirements.txt"
 deactivate
 
-echo -e "${YELLOW}Gunicorn restart edilir...${NC}"
+echo -e "${YELLOW}Gunicorn + Nginx restart edilir...${NC}"
 sudo systemctl restart omdu
+sudo systemctl restart nginx
 
 echo -e "${GREEN}Yeniləmə tamamlandı!${NC}"
