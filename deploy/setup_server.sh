@@ -81,7 +81,7 @@ source "$VENV_DIR/bin/activate"
 
 pip install --upgrade pip
 pip install -r "$FLASK_DIR/requirements.txt"
-pip install gunicorn
+pip install gunicorn cryptography
 
 # .env faylı yarat
 cat > "$FLASK_DIR/.env" << EOF
