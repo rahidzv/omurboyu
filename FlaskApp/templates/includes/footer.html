@@ -3,16 +3,19 @@
         <div class="row g-5">
             <div class="col-lg-4">
                 <div class="footer-brand">
-                    <span class="logo-text text-white fw-bold fs-3">ÖTM</span>
+                    {% if site_settings.get('site_logo') %}
+                        <img src="{{ url_for('static', filename=site_settings.get('site_logo')) }}" alt="Logo" style="max-height: 50px;" class="mb-2">
+                    {% endif %}
+                    <span class="logo-text text-white fw-bold fs-3">{{ site_settings.get('site_name', 'ÖTM') }}</span>
                     <p class="mt-3 text-white-50">
-                        Mingəçevir Dövlət Universiteti nəzdində fəaliyyət göstərən Ömürboyu Təhsil Məktəbi 
-                        peşəkar inkişaf və davamlı öyrənmə imkanları təqdim edir.
+                        {{ site_settings.get('site_description', 'Mingəçevir Dövlət Universiteti nəzdində fəaliyyət göstərən Ömürboyu Təhsil Məktəbi peşəkar inkişaf və davamlı öyrənmə imkanları təqdim edir.') }}
                     </p>
                     <div class="social-links mt-3">
-                        <a href="#" class="social-link"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="social-link"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
-                        <a href="#" class="social-link"><i class="bi bi-youtube"></i></a>
+                        {% if site_settings.get('facebook') %}<a href="{{ site_settings.get('facebook') }}" class="social-link" target="_blank"><i class="bi bi-facebook"></i></a>{% endif %}
+                        {% if site_settings.get('instagram') %}<a href="{{ site_settings.get('instagram') }}" class="social-link" target="_blank"><i class="bi bi-instagram"></i></a>{% endif %}
+                        {% if site_settings.get('linkedin') %}<a href="{{ site_settings.get('linkedin') }}" class="social-link" target="_blank"><i class="bi bi-linkedin"></i></a>{% endif %}
+                        {% if site_settings.get('youtube') %}<a href="{{ site_settings.get('youtube') }}" class="social-link" target="_blank"><i class="bi bi-youtube"></i></a>{% endif %}
+                        {% if site_settings.get('telegram') %}<a href="{{ site_settings.get('telegram') }}" class="social-link" target="_blank"><i class="bi bi-telegram"></i></a>{% endif %}
                     </div>
                 </div>
             </div>
@@ -37,15 +40,15 @@
             <div class="col-lg-3 col-md-4">
                 <h5 class="text-white mb-3">Əlaqə</h5>
                 <ul class="footer-contact">
-                    <li><i class="bi bi-geo-alt"></i> Mingəçevir şəhəri, Azərbaycan</li>
-                    <li><i class="bi bi-telephone"></i> +994 XX XXX XX XX</li>
-                    <li><i class="bi bi-envelope"></i> info@mdu.edu.az</li>
+                    <li><i class="bi bi-geo-alt"></i> {{ site_settings.get('address', 'Mingəçevir şəhəri, Azərbaycan') }}</li>
+                    <li><i class="bi bi-telephone"></i> {{ site_settings.get('contact_phone', '+994 XX XXX XX XX') }}</li>
+                    <li><i class="bi bi-envelope"></i> {{ site_settings.get('contact_email', 'info@mdu.edu.az') }}</li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
-                <p class="mb-0 text-white-50">&copy; 2025 Ömürboyu Təhsil Məktəbi - Mingəçevir Dövlət Universiteti. Bütün hüquqlar qorunur.</p>
+                <p class="mb-0 text-white-50">&copy; {{ now.year }} {{ site_settings.get('site_name', 'Ömürboyu Təhsil Məktəbi') }} - {{ site_settings.get('footer_text', 'Mingəçevir Dövlət Universiteti. Bütün hüquqlar qorunur.') }}</p>
                 <div class="d-flex gap-3 mt-2 mt-md-0">
                     <a href="{{ url_for('public.faq') }}" class="text-white-50 small">FAQ</a>
                     <a href="{{ url_for('public.resources') }}" class="text-white-50 small">Resurslar</a>
