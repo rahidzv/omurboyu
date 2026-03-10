@@ -4,7 +4,7 @@
             <div class="col-lg-4">
                 <div class="footer-brand">
                     {% if site_settings.get('site_logo') %}
-                        <img src="{{ url_for('static', filename=site_settings.get('site_logo')) }}" alt="Logo" style="max-height: {{ site_settings.get('logo_height_footer', '50') }}px;" class="mb-2">
+                        <img src="{{ url_for('static', filename=site_settings.get('site_logo')) }}" alt="Logo" class="footer-logo mb-2">
                     {% endif %}
                     <span class="logo-text text-white fw-bold fs-3">{{ site_settings.get('site_name', 'ÖTM') }}</span>
                     <p class="mt-3 text-white-50">

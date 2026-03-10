@@ -3,7 +3,7 @@
         <div class="header-inner">
             <a href="{{ url_for('public.index') }}" class="header-logo">
                 {% if site_settings.get('site_logo') %}
-                    <img src="{{ url_for('static', filename=site_settings.get('site_logo')) }}" alt="Logo" style="max-height: {{ site_settings.get('logo_height_header', '40') }}px;" class="me-2">
+                    <img src="{{ url_for('static', filename=site_settings.get('site_logo')) }}" alt="Logo" class="header-logo-img me-2">
                 {% endif %}
                 <span class="logo-text gradient-text fw-bold">{{ site_settings.get('site_name', 'ÖTM') }}</span>
                 <span class="logo-subtitle d-none d-md-inline">{{ site_settings.get('site_tagline', 'Ömürboyu Təhsil Məktəbi') }}</span>
