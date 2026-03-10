@@ -1,0 +1,43 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}{{ page_title }} - Redaktə{% endblock %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <a href="{{ url_for('admin.pages_list') }}" class="text-muted text-decoration-none small">
+            <i class="bi bi-arrow-left"></i> Səhifələr
+        </a>
+        <h4 class="fw-bold mb-0 mt-1">{{ page_title }} — Məzmun Redaktoru</h4>
+    </div>
+</div>
+
+<form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <div class="row g-4">
+        {% for section_key, label, field_type in sections %}
+        <div class="{% if field_type == 'textarea' %}col-12{% else %}col-md-6{% endif %}">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <label for="{{ section_key }}" class="form-label fw-semibold">{{ label }}</label>
+                    {% if field_type == 'textarea' %}
+                        <textarea name="{{ section_key }}" id="{{ section_key }}"
+                                  class="form-control" rows="4">{{ current.get(section_key, '') }}</textarea>
+                    {% else %}
+                        <input type="text" name="{{ section_key }}" id="{{ section_key }}"
+                               class="form-control" value="{{ current.get(section_key, '') }}">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="mt-4 d-flex gap-2">
+        <button type="submit" class="btn btn-primary btn-lg">
+            <i class="bi bi-check-lg me-1"></i> Yadda Saxla
+        </button>
+        <a href="{{ url_for('admin.pages_list') }}" class="btn btn-outline-secondary btn-lg">Ləğv Et</a>
+    </div>
+</form>
+{% endblock %}

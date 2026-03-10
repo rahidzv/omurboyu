@@ -3,7 +3,7 @@ from flask_login import current_user
 from app import db
 from models import (Division, Program, Event, Staff, Testimonial, Document,
                     Registration, ContactMessage, Newsletter, LanguageTestResult,
-                    EngineeringProject, SiteSetting)
+                    EngineeringProject, SiteSetting, PageContent)
 
 public_bp = Blueprint('public', __name__)
 
@@ -14,17 +14,20 @@ def index():
     programs = Program.query.filter_by(is_active=True).order_by(Program.rating.desc()).limit(4).all()
     events = Event.query.filter_by(is_active=True).order_by(Event.date.desc()).limit(3).all()
     testimonials = Testimonial.query.filter_by(is_active=True).all()
+    page = PageContent.get_page('index')
     return render_template('public/index.html',
                            divisions=divisions,
                            programs=programs,
                            events=events,
-                           testimonials=testimonials)
+                           testimonials=testimonials,
+                           page=page)
 
 
 @public_bp.route('/about')
 def about():
     director = Staff.query.filter_by(is_director=True, is_active=True).first()
-    return render_template('public/about.html', director=director)
+    page = PageContent.get_page('about')
+    return render_template('public/about.html', director=director, page=page)
 
 
 @public_bp.route('/divisions')
@@ -187,7 +190,8 @@ def contact():
         db.session.commit()
         flash('Mesajınız uğurla göndərildi!', 'success')
         return redirect(url_for('public.contact'))
-    return render_template('public/contact.html')
+    page = PageContent.get_page('contact')
+    return render_template('public/contact.html', page=page)
 
 
 @public_bp.route('/documents')

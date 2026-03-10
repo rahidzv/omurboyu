@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 from app import db
 from models import (User, Division, Program, Event, Staff, Testimonial, Document,
                     Registration, ContactMessage, Newsletter, LanguageTestResult,
-                    EngineeringProject, SiteSetting)
+                    EngineeringProject, SiteSetting, PageContent)
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -740,3 +740,88 @@ def change_password():
             return redirect(url_for('admin.dashboard'))
 
     return render_template('admin/change_password.html')
+
+
+# ─── PAGE CONTENT EDITOR ────────────────────────────────────────────────────
+
+# Editable pages and their sections
+PAGE_SECTIONS = {
+    'index': {
+        'title': 'Ana Səhifə',
+        'sections': [
+            ('hero_title', 'Hero Başlıq', 'text'),
+            ('hero_subtitle', 'Hero Alt Başlıq', 'textarea'),
+            ('divisions_title', 'Bölmələr Başlıq', 'text'),
+            ('divisions_subtitle', 'Bölmələr Alt Başlıq', 'textarea'),
+            ('programs_title', 'Proqramlar Başlıq', 'text'),
+            ('programs_subtitle', 'Proqramlar Alt Başlıq', 'textarea'),
+            ('events_title', 'Tədbirlər Başlıq', 'text'),
+            ('events_subtitle', 'Tədbirlər Alt Başlıq', 'textarea'),
+            ('cta_title', 'CTA Başlıq', 'text'),
+            ('cta_subtitle', 'CTA Alt Başlıq', 'textarea'),
+        ]
+    },
+    'about': {
+        'title': 'Haqqımızda',
+        'sections': [
+            ('hero_text', 'Hero Mətni', 'textarea'),
+            ('mission', 'Missiyamız', 'textarea'),
+            ('vision', 'Vizyonumuz', 'textarea'),
+            ('history', 'Tariximiz', 'textarea'),
+            ('achievements_title', 'Nailiyyətlər Başlıq', 'text'),
+            ('achievements_subtitle', 'Nailiyyətlər Alt Başlıq', 'text'),
+            ('stat_1_value', 'Statistika 1 Rəqəm', 'text'),
+            ('stat_1_label', 'Statistika 1 Ad', 'text'),
+            ('stat_2_value', 'Statistika 2 Rəqəm', 'text'),
+            ('stat_2_label', 'Statistika 2 Ad', 'text'),
+            ('stat_3_value', 'Statistika 3 Rəqəm', 'text'),
+            ('stat_3_label', 'Statistika 3 Ad', 'text'),
+            ('stat_4_value', 'Statistika 4 Rəqəm', 'text'),
+            ('stat_4_label', 'Statistika 4 Ad', 'text'),
+        ]
+    },
+    'contact': {
+        'title': 'Əlaqə',
+        'sections': [
+            ('hero_text', 'Hero Mətni', 'text'),
+            ('address', 'Ünvan', 'text'),
+            ('phone', 'Telefon', 'text'),
+            ('email', 'E-poçt', 'text'),
+            ('working_hours', 'İş Saatları', 'text'),
+        ]
+    },
+}
+
+
+@admin_bp.route('/pages')
+@login_required
+def pages_list():
+    pages = []
+    for slug, info in PAGE_SECTIONS.items():
+        pages.append({'slug': slug, 'title': info['title']})
+    return render_template('admin/pages_list.html', pages=pages)
+
+
+@admin_bp.route('/pages/<slug>', methods=['GET', 'POST'])
+@login_required
+def page_edit(slug):
+    if slug not in PAGE_SECTIONS:
+        flash('Səhifə tapılmadı.', 'danger')
+        return redirect(url_for('admin.pages_list'))
+
+    page_info = PAGE_SECTIONS[slug]
+
+    if request.method == 'POST':
+        for section_key, label, field_type in page_info['sections']:
+            val = request.form.get(section_key, '').strip()
+            PageContent.set(slug, section_key, val)
+        flash(f'"{page_info["title"]}" səhifəsi yeniləndi!', 'success')
+        return redirect(url_for('admin.page_edit', slug=slug))
+
+    # Load current values
+    current = PageContent.get_page(slug)
+    return render_template('admin/page_edit.html',
+                           page_slug=slug,
+                           page_title=page_info['title'],
+                           sections=page_info['sections'],
+                           current=current)

@@ -4,7 +4,7 @@
 import json
 from datetime import date
 from app import create_app
-from models import db, User, Division, Program, Event, Staff, Testimonial, Document, SiteSetting
+from models import db, User, Division, Program, Event, Staff, Testimonial, Document, SiteSetting, PageContent
 
 def seed():
     app = create_app()

@@ -11,11 +11,10 @@
                 <div class="hero-content animate-fade-up">
                     <div class="hero-blur-box">
                         <h1 class="hero-title text-white">
-                            Ömürboyu Öyrənmə, <br><span class="text-accent">Sonsuz İmkanlar</span>
+                            {{ page.get('hero_title', '') | default('Ömürboyu Öyrənmə, <br><span class=\"text-accent\">Sonsuz İmkanlar</span>', true) | safe }}
                         </h1>
                         <p class="hero-text text-white-75">
-                            Mingəçevir Dövlət Universiteti nəzdində fəaliyyət göstərən Ömürboyu Təhsil Məktəbi 
-                            peşəkar inkişaf, dil öyrənmə və mühəndislik təkmilləşdirmə proqramları təqdim edir.
+                            {{ page.get('hero_subtitle', '') | default('Mingəçevir Dövlət Universiteti nəzdində fəaliyyət göstərən Ömürboyu Təhsil Məktəbi peşəkar inkişaf, dil öyrənmə və mühəndislik təkmilləşdirmə proqramları təqdim edir.', true) }}
                         </p>
                     </div>
                     <div class="d-flex flex-wrap gap-3 mt-4">
@@ -36,10 +35,9 @@
 <section class="section-padding bg-light">
     <div class="container">
         <div class="text-center mb-5 animate-fade-up">
-            <h2 class="section-title"><span class="gradient-text">Bölmələrimiz</span></h2>
+            <h2 class="section-title"><span class="gradient-text">{{ page.get('divisions_title', '') | default('Bölmələrimiz', true) }}</span></h2>
             <p class="section-subtitle">
-                Ömürboyu Təhsil Məktəbi üç əsas bölmədən ibarətdir və hər biri fərqli sahələrdə 
-                peşəkar inkişaf imkanları təqdim edir.
+                {{ page.get('divisions_subtitle', '') | default('Ömürboyu Təhsil Məktəbi üç əsas bölmədən ibarətdir və hər biri fərqli sahələrdə peşəkar inkişaf imkanları təqdim edir.', true) }}
             </p>
         </div>
         <div class="row g-4">
@@ -68,8 +66,8 @@
     <div class="container">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-5">
             <div class="animate-fade-up">
-                <h2 class="section-title"><span class="gradient-text">Populyar Proqramlar</span></h2>
-                <p class="section-subtitle mb-0">Peşəkar inkişaf üçün ən çox seçilən təlim proqramlarımız.</p>
+                <h2 class="section-title"><span class="gradient-text">{{ page.get('programs_title', '') | default('Populyar Proqramlar', true) }}</span></h2>
+                <p class="section-subtitle mb-0">{{ page.get('programs_subtitle', '') | default('Peşəkar inkişaf üçün ən çox seçilən təlim proqramlarımız.', true) }}</p>
             </div>
             <a href="{{ url_for('public.programs') }}" class="btn btn-outline-primary mt-3 mt-md-0">
                 Bütün Proqramlar <i class="bi bi-arrow-right"></i>
@@ -106,8 +104,8 @@
     <div class="container">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-5">
             <div class="animate-fade-up">
-                <h2 class="section-title"><span class="gradient-text">Qarşıdan Gələn Tədbirlər</span></h2>
-                <p class="section-subtitle mb-0">Seminarlar, workshoplar və yarışmalar haqqında məlumat əldə edin.</p>
+                <h2 class="section-title"><span class="gradient-text">{{ page.get('events_title', '') | default('Qarşıdan Gələn Tədbirlər', true) }}</span></h2>
+                <p class="section-subtitle mb-0">{{ page.get('events_subtitle', '') | default('Seminarlar, workshoplar və yarışmalar haqqında məlumat əldə edin.', true) }}</p>
             </div>
             <a href="{{ url_for('public.events') }}" class="btn btn-outline-primary mt-3 mt-md-0">
                 Bütün Tədbirlər <i class="bi bi-arrow-right"></i>
@@ -170,8 +168,8 @@
     <div class="container text-center position-relative z-2">
         <div class="row justify-content-center">
             <div class="col-lg-8 animate-fade-up">
-                <h2 class="text-white fw-bold mb-4 fs-2">Peşəkar İnkişaf Səyahətinizə Başlayın</h2>
-                <p class="text-white-75 fs-5 mb-4">Yeni bacarıqlar öyrənin, sertifikat əldə edin və karyeranızı bir addım irəli aparın.</p>
+                <h2 class="text-white fw-bold mb-4 fs-2">{{ page.get('cta_title', '') | default('Peşəkar İnkişaf Səyahətinizə Başlayın', true) }}</h2>
+                <p class="text-white-75 fs-5 mb-4">{{ page.get('cta_subtitle', '') | default('Yeni bacarıqlar öyrənin, sertifikat əldə edin və karyeranızı bir addım irəli aparın.', true) }}</p>
                 <div class="d-flex flex-wrap justify-content-center gap-3 mb-5">
                     <a href="{{ url_for('user.register') }}" class="btn btn-light btn-lg text-primary fw-semibold">
                         İndi Qeydiyyatdan Keç <i class="bi bi-arrow-right ms-2"></i>

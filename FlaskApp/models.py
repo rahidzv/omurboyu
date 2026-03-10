@@ -253,3 +253,38 @@ class SiteSetting(db.Model):
             db.session.add(setting)
         if auto_commit:
             db.session.commit()
+
+
+class PageContent(db.Model):
+    """Səhifə məzmunlarını idarə etmək üçün model."""
+    id = db.Column(db.Integer, primary_key=True)
+    page_slug = db.Column(db.String(50), nullable=False)
+    section_key = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.Text, default='')
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    __table_args__ = (db.UniqueConstraint('page_slug', 'section_key', name='uq_page_section'),)
+
+    @staticmethod
+    def get(page_slug, section_key, default=''):
+        item = PageContent.query.filter_by(page_slug=page_slug, section_key=section_key).first()
+        return item.content if item and item.content else default
+
+    @staticmethod
+    def set(page_slug, section_key, content):
+        item = PageContent.query.filter_by(page_slug=page_slug, section_key=section_key).first()
+        if item:
+            item.content = content
+        else:
+            item = PageContent(page_slug=page_slug, section_key=section_key, content=content)
+            db.session.add(item)
+        db.session.commit()
+
+    @staticmethod
+    def get_page(page_slug):
+        """Bir səhifənin bütün section-larını dict olaraq qaytarır."""
+        items = PageContent.query.filter_by(page_slug=page_slug).all()
+        return {item.section_key: item.content for item in items}
+
+    def __repr__(self):
+        return f'<PageContent {self.page_slug}/{self.section_key}>'

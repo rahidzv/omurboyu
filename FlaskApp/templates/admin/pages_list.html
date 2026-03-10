@@ -1,0 +1,37 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Səhifə Redaktoru{% endblock %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0">Səhifə Redaktoru</h4>
+</div>
+
+<div class="row g-4">
+    {% for page in pages %}
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body d-flex flex-column">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="icon-box icon-box-primary">
+                        {% if page.slug == 'index' %}
+                            <i class="bi bi-house"></i>
+                        {% elif page.slug == 'about' %}
+                            <i class="bi bi-info-circle"></i>
+                        {% elif page.slug == 'contact' %}
+                            <i class="bi bi-envelope"></i>
+                        {% else %}
+                            <i class="bi bi-file-text"></i>
+                        {% endif %}
+                    </div>
+                    <h5 class="fw-bold mb-0">{{ page.title }}</h5>
+                </div>
+                <p class="text-muted small mb-3">Bu səhifənin məzmununu redaktə edin.</p>
+                <a href="{{ url_for('admin.page_edit', slug=page.slug) }}" class="btn btn-outline-primary mt-auto">
+                    <i class="bi bi-pencil me-1"></i> Redaktə Et
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

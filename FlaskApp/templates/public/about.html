@@ -8,8 +8,7 @@
         <div class="animate-fade-up">
             <h1 class="text-white fw-bold display-5">Haqqımızda</h1>
             <p class="text-white-75 fs-5 mt-3">
-                Mingəçevir Dövlət Universiteti nəzdində fəaliyyət göstərən Ömürboyu Təhsil Məktəbi 
-                peşəkar inkişaf və davamlı öyrənmə sahəsində lider təşkilatdır.
+                {{ page.get('hero_text', '') | default('Mingəçevir Dövlət Universiteti nəzdində fəaliyyət göstərən Ömürboyu Təhsil Məktəbi peşəkar inkişaf və davamlı öyrənmə sahəsində lider təşkilatdır.', true) }}
             </p>
         </div>
     </div>
@@ -27,11 +26,7 @@
                         </div>
                         <h3 class="fw-bold">Missiyamız</h3>
                         <p class="text-muted">
-                            Ömürboyu Təhsil Məktəbinin missiyası cəmiyyətin bütün üzvlərinə, xüsusilə 
-                            peşəkarlar və tələbələrə keyfiyyətli təhsil və inkişaf imkanları təqdim etməkdir. 
-                            Biz müasir texnologiyalar və beynəlxalq standartlar əsasında öyrənmə mühiti 
-                            yaradaraq, fərdlərin peşəkar bacarıqlarını artırmağı və rəqabət qabiliyyətini 
-                            gücləndirməyi hədəfləyirik.
+                            {{ page.get('mission', '') | default('Ömürboyu Təhsil Məktəbinin missiyası cəmiyyətin bütün üzvlərinə, xüsusilə peşəkarlar və tələbələrə keyfiyyətli təhsil və inkişaf imkanları təqdim etməkdir. Biz müasir texnologiyalar və beynəlxalq standartlar əsasında öyrənmə mühiti yaradaraq, fərdlərin peşəkar bacarıqlarını artırmağı və rəqabət qabiliyyətini gücləndirməyi hədəfləyirik.', true) }}
                         </p>
                     </div>
                 </div>
@@ -44,10 +39,7 @@
                         </div>
                         <h3 class="fw-bold">Vizyonumuz</h3>
                         <p class="text-muted">
-                            Regionda ömürboyu təhsil sahəsində lider və nümunəvi təşkilat olmaq. 
-                            İnnovasiya və keyfiyyət prinsiplərinə sadiq qalaraq, beynəlxalq səviyyədə 
-                            tanınan təhsil proqramları təqdim etmək. Tələbə və peşəkarların karyera 
-                            uğurlarına töhfə verən, cəmiyyətin inkişafına xidmət edən bir qurum olmaq.
+                            {{ page.get('vision', '') | default('Regionda ömürboyu təhsil sahəsində lider və nümunəvi təşkilat olmaq. İnnovasiya və keyfiyyət prinsiplərinə sadiq qalaraq, beynəlxalq səviyyədə tanınan təhsil proqramları təqdim etmək. Tələbə və peşəkarların karyera uğurlarına töhfə verən, cəmiyyətin inkişafına xidmət edən bir qurum olmaq.', true) }}
                         </p>
                     </div>
                 </div>
@@ -68,9 +60,7 @@
                     <h2 class="fw-bold gradient-text mb-0">Tariximiz</h2>
                 </div>
                 <div class="text-muted lh-lg">
-                    <p>Ömürboyu Təhsil Məktəbi Mingəçevir Dövlət Universitetinin strateji təşəbbüsü olaraq yaradılmışdır. Məktəb qısa müddətdə regionda ən etibarlı təhsil mərkəzlərindən birinə çevrilmişdir.</p>
-                    <p>İlk illərindən etibarən məktəb yüzlərlə tələbəyə xidmət göstərmiş, onların peşəkar inkişafına və karyera uğurlarına töhfə vermişdir. Bu gün məktəb üç əsas bölmədə fəaliyyət göstərir: Qiyabi və Təkrar Ali Təhsil, Mühəndis Təkmilləşdirmə və Sertifikatlaşdırma, Beynəlxalq Dil Mərkəzi.</p>
-                    <p>Beynəlxalq standartlara uyğun proqramlar, təcrübəli müəllimlər və müasir infrastruktur məktəbin əsas üstünlükləridir.</p>
+                    {{ page.get('history', '') | default('<p>Ömürboyu Təhsil Məktəbi Mingəçevir Dövlət Universitetinin strateji təşəbbüsü olaraq yaradılmışdır. Məktəb qısa müddətdə regionda ən etibarlı təhsil mərkəzlərindən birinə çevrilmişdir.</p><p>İlk illərindən etibarən məktəb yüzlərlə tələbəyə xidmət göstərmiş, onların peşəkar inkişafına və karyera uğurlarına töhfə vermişdir. Bu gün məktəb üç əsas bölmədə fəaliyyət göstərir: Qiyabi və Təkrar Ali Təhsil, Mühəndis Təkmilləşdirmə və Sertifikatlaşdırma, Beynəlxalq Dil Mərkəzi.</p><p>Beynəlxalq standartlara uyğun proqramlar, təcrübəli müəllimlər və müasir infrastruktur məktəbin əsas üstünlükləridir.</p>', true) | safe }}
                 </div>
             </div>
         </div>
@@ -116,15 +106,15 @@
 <section class="section-padding bg-light">
     <div class="container">
         <div class="text-center mb-5 animate-fade-up">
-            <h2 class="fw-bold gradient-text">Nailiyyətlərimiz</h2>
-            <p class="text-muted">İllərin təcrübəsi, minlərlə məzun və beynəlxalq tanınma.</p>
+            <h2 class="fw-bold gradient-text">{{ page.get('achievements_title', '') | default('Nailiyyətlərimiz', true) }}</h2>
+            <p class="text-muted">{{ page.get('achievements_subtitle', '') | default('İllərin təcrübəsi, minlərlə məzun və beynəlxalq tanınma.', true) }}</p>
         </div>
         <div class="row g-4">
             {% for stat in [
-                {'icon': 'people', 'value': '1000+', 'label': 'Məzun'},
-                {'icon': 'award', 'value': '50+', 'label': 'Proqram'},
-                {'icon': 'building', 'value': '15+', 'label': 'İl Təcrübə'},
-                {'icon': 'bullseye', 'value': '95%', 'label': 'Məmnuniyyət'}
+                {'icon': 'people', 'value': page.get('stat_1_value', '') | default('1000+', true), 'label': page.get('stat_1_label', '') | default('Məzun', true)},
+                {'icon': 'award', 'value': page.get('stat_2_value', '') | default('50+', true), 'label': page.get('stat_2_label', '') | default('Proqram', true)},
+                {'icon': 'building', 'value': page.get('stat_3_value', '') | default('15+', true), 'label': page.get('stat_3_label', '') | default('İl Təcrübə', true)},
+                {'icon': 'bullseye', 'value': page.get('stat_4_value', '') | default('95%', true), 'label': page.get('stat_4_label', '') | default('Məmnuniyyət', true)}
             ] %}
             <div class="col-md-3 col-6 animate-fade-up delay-{{ loop.index0 }}">
                 <div class="card text-center shadow-card">
