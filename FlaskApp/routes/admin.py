@@ -606,6 +606,7 @@ def site_settings():
             'hero_title', 'hero_subtitle',
             'meta_title', 'meta_description', 'meta_keywords',
             'footer_text', 'google_analytics',
+            'logo_height_header', 'logo_height_footer',
         ]
         for key in keys:
             val = request.form.get(key, '').strip()

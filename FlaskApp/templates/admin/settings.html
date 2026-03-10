@@ -46,6 +46,19 @@
                     <small class="text-muted">PNG, JPG, SVG. Tövsiyə: 200x60px</small>
                 </div>
                 <div class="col-md-6">
+                    <label class="form-label fw-medium">Logo Boyutu (px)</label>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label class="form-label small text-muted">Header</label>
+                            <input type="number" name="logo_height_header" class="form-control" value="{{ settings.get('logo_height_header', '40') }}" min="20" max="120" placeholder="40">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small text-muted">Footer</label>
+                            <input type="number" name="logo_height_footer" class="form-control" value="{{ settings.get('logo_height_footer', '50') }}" min="20" max="120" placeholder="50">
+                        </div>
+                    </div>
+                    <small class="text-muted">Logonun hündürlüyü (piksel)</small>
+                </div>
                     <label class="form-label fw-medium">Favicon</label>
                     {% if settings.get('site_favicon') %}
                     <div class="mb-2">
